@@ -21,6 +21,7 @@ def add_patient(model):
             'materno': model.materno,
             'age': model.age,
             'phone': model.phone,
+            'costo': model.costo,
             'status': True
         }
         res = conn.patients.insert_one(data_patient)
@@ -41,6 +42,7 @@ def edit_patient(model, patient_id):
             'materno': model.materno,
             'age': model.age,
             'phone': model.phone,
+            'costo': model.costo,
         }
 
         res = conn.patients.update_one(
@@ -59,7 +61,7 @@ def list_patient():
         Método para obtener un listado de datos de los pacientes
     """
     try:
-        res = conn.patients.find({'status': True})
+        res = conn.patients.find({'status': True}).sort('paterno', 1)
         serializer_data = [{**doc, "_id": str(doc["_id"])} for doc in res]
         return standar_response(message="Listado de pacientes", data=serializer_data)
     except Exception as e:
